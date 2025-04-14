@@ -65,7 +65,6 @@ export const List = () => {
                 // clear the input field
                 setNewItem("");
                 console.log(result);
-                getUserTodos();
 
             })
 
