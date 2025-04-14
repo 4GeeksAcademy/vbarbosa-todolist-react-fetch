@@ -16,6 +16,7 @@ export const List = () => {
 
     const getUserTodos = () => {
         fetch(url,options)
+
         .then(response => {
             console.log(response)
             if (!response.ok) throw new Error (`error status code:${response.status}`)
@@ -64,8 +65,8 @@ export const List = () => {
                 // clear the input field
                 setNewItem("");
                 console.log(result);
-
                 getUserTodos();
+
             })
 
             .catch(error => console.log("Error: ", error));
@@ -74,6 +75,7 @@ export const List = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        getUserTodos();
     };
 
     const handleDelete = (id) => {
@@ -102,6 +104,8 @@ export const List = () => {
             .then(() => {
                 setList([]); // Clear the local state
                 console.log("All tasks deleted successfully");
+
+                getUserTodos();
             })
 
         .catch(error => console.log("Error: ", error));
