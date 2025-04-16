@@ -14,8 +14,8 @@ export const List = () => {
         }
     }
 
-    const getUserTodos = () => {
-        fetch(url,options)
+    const getUser = () => {
+        fetch (url,options)
 
         .then(response => {
             console.log(response)
@@ -29,11 +29,29 @@ export const List = () => {
         })
 
         .catch(err => console.log(err))
+    }
+
+    const getUserTodos = () => {
+        fetch(url,options)
+
+        .then(response => {
+            console.log(response)
+            if (!response.ok) throw new Error (`error status code:${response.status}`)
+                return response.json()
+            
+        })
+        .then(parsedJson => {
+            getUser();
+            console.log(parsedJson.todos);
+            setList(parsedJson.todos);
+        })
+
+        .catch(err => console.log(err))
     } 
 
     // Render the main page
     useEffect(() =>{
-       getUserTodos();
+       getUser();
        setList([]);
 
     }, []);
@@ -86,7 +104,7 @@ export const List = () => {
         .then(() => {
             const updatedList = list.filter((el) => el.id !== id);
             setList(updatedList);
-            getUserTodos();
+            getUser();
         })
         .catch(error => console.log("Error: ", error));
     };
@@ -104,7 +122,7 @@ export const List = () => {
                 setList([]); // Clear the local state
                 console.log("All tasks deleted successfully");
 
-                getUserTodos();
+                getUser();
             })
 
         .catch(error => console.log("Error: ", error));
@@ -124,8 +142,8 @@ export const List = () => {
                         onChange={(e) => setNewItem(e.target.value)}
                         className="form-control border-0 fs-5"/>
                     </form>
-                    <div class="d-grid w-25 gap-2 d-md-flex ms-auto m-2">
-                        <button class="btn btn-danger" type="button" onClick={deleteAll}>Delete List</button>
+                    <div className="d-grid w-25 gap-2 d-md-flex ms-auto m-2">
+                        <button className="btn btn-danger" type="button" onClick={deleteAll}>Delete List</button>
                     </div>
                 </li>
 
