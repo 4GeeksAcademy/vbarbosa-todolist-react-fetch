@@ -24,21 +24,25 @@ export const List = () => {
 		}
 	}
 
-	const getUser = async (slug = "vbarbosa") => {
-
-        createUser();
+	const getUser = async (user = "vbarbosa") => {
 
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/users/' + slug ,{
+			const resp = await fetch('https://playground.4geeks.com/todo/users/' + user ,{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json"
 				}
 			});
-			const data = await resp.json()
-            setList(data.todos);
-            console.log(data.todos);
-			return data
+            if (resp.ok) {
+                // Agenda exists, fetch contacts
+                const data = await resp.json()
+                setList(data.todos);
+                console.log(data.todos);
+                return data
+            } else {
+                // Agenda does not exist, create it
+                await createUser(user);
+            }
 
 		} catch (error) {
 			console.log(error);
