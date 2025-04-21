@@ -6,14 +6,6 @@ export const List = () => {
     const [newItem, setNewItem] = useState("");
     const [hidden, setHidden] = useState({});
 
-    const url = 'https://playground.4geeks.com/todo/users/vbarbosa';
-    const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-    }
-
 	const createUser = async (user = "vbarbosa") => {
 		
 		try {
@@ -34,24 +26,24 @@ export const List = () => {
 
 	const getUser = async (slug = "vbarbosa") => {
 
+        createUser();
+
 		try {
-			const resp = await fetch('https://playground.4geeks.com/todo/users/' + slug, {
+			const resp = await fetch('https://playground.4geeks.com/todo/users/' + slug ,{
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json"
 				}
 			});
 			const data = await resp.json()
+            setList(data.todos);
             console.log(data.todos);
-            setList(data.todos)
 			return data
 
 		} catch (error) {
 			console.log(error);
 		}
 	}
-
-    
 
     // Render the main page
     useEffect(() =>{
@@ -94,7 +86,6 @@ export const List = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        getUser();
     };
 
     const handleDelete = (id) => {
@@ -106,7 +97,6 @@ export const List = () => {
         .then(() => {
             const updatedList = list.filter((el) => el.id !== id);
             setList(updatedList);
-            getUser();
         })
         .catch(error => console.log("Error: ", error));
     };
@@ -123,8 +113,6 @@ export const List = () => {
             .then(() => {
                 setList([]); // Clear the local state
                 console.log("All tasks deleted successfully");
-
-                getUser();
             })
 
         .catch(error => console.log("Error: ", error));
