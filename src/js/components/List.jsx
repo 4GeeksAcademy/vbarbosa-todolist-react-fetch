@@ -14,46 +14,48 @@ export const List = () => {
         }
     }
 
-    const getUser = () => {
-        fetch (url,options)
+	const createUser = async (user = "vbarbosa") => {
+		
+		try {
+			const resp = await fetch('https://playground.4geeks.com/todo/users/'+ user, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			const data = await resp.json()
+			console.log(data);
+			
+			return data
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-        .then(response => {
-            console.log(response)
-            if (!response.ok) throw new Error (`error status code:${response.status}`)
-                return response.json()
-            
-        })
-        .then(parsedJson => {
-            console.log(parsedJson.todos);
-            setList(parsedJson.todos);
-        })
+	const getUser = async (slug = "vbarbosa") => {
 
-        .catch(err => console.log(err))
-    }
+		try {
+			const resp = await fetch('https://playground.4geeks.com/todo/users/' + slug, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			const data = await resp.json()
+            console.log(data.todos);
+            setList(data.todos)
+			return data
 
-    const getUserTodos = () => {
-        fetch(url,options)
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-        .then(response => {
-            console.log(response)
-            if (!response.ok) throw new Error (`error status code:${response.status}`)
-                return response.json()
-            
-        })
-        .then(parsedJson => {
-            getUser();
-            console.log(parsedJson.todos);
-            setList(parsedJson.todos);
-        })
-
-        .catch(err => console.log(err))
-    } 
+    
 
     // Render the main page
     useEffect(() =>{
        getUser();
-       setList([]);
-
     }, []);
 
     const handleChange = (e) => {
@@ -92,7 +94,7 @@ export const List = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        getUserTodos();
+        getUser();
     };
 
     const handleDelete = (id) => {
